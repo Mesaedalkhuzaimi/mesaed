@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صندوق الهوية الإماراتية</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(#fff8dc, #ffe680);
+      text-align: center;
+      direction: rtl;
+      padding: 20px;
+    }
+    h1 {
+      color: #000;
+      font-size: 32px;
+    }
+    .subtitle {
+      font-size: 16px;
+      font-weight: bold;
+      color: green;
+    }
+    #box {
+      margin: 30px auto;
+      width: 220px;
+      height: 220px;
+      background-image: url('box.png');
+      background-size: cover;
+      background-position: center;
+      border: 4px solid #00703c;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .question {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .options button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #eee;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .options button:hover {
+      background-color: #ddd;
+    }
+    #score {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #004d00;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎁 صندوق الهوية الإماراتية</h1>
+  <p class="subtitle">هذا الموقع بتصميم وإعداد وتنفيذ: مساعد سالم الخزيمي</p>
+  <p>اضغط على الصندوق لاكتشاف الأسئلة التفاعلية!</p>
+
+  <div id="box" onclick="revealCard()"></div>
+
+  <div id="question" class="question"></div>
+  <div id="options" class="options"></div>
+  <div id="score">النقاط: 0</div>
+
+  <audio id="openSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7cfc1f91db.mp3?filename=unfold-103126.mp3"></audio>
+  <audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5508ae1195.mp3?filename=magic-chime-7033.mp3"></audio>
+  <audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0099e8d61d.mp3?filename=error-126627.mp3"></audio>
+
+  <script>
+    let current = 0;
+    let score = 0;
+    const openSound = document.getElementById("openSound");
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+
+    const questions = [
+      {
+        q: "ما هو شعار دولة الإمارات؟",
+        options: ["نسر ذهبي", "صقر فضي", "باز أحمر"],
+        answer: "نسر ذهبي"
+      },
+      {
+        q: "كم عدد الإمارات؟",
+        options: ["7", "6", "9"],
+        answer: "7"
+      },
+      {
+        q: "ما اسم العملة الرسمية؟",
+        options: ["درهم", "ريال", "دينار"],
+        answer: "درهم"
+      }
+    ];
+
+    function revealCard() {
+      if (current >= questions.length) {
+        document.getElementById("question").innerHTML = "تم الانتهاء!";
+        document.getElementById("options").innerHTML = "";
+        return;
+      }
+      openSound.play();
+      let q = questions[current];
+      document.getElementById("question").innerText = q.q;
+      document.getElementById("options").innerHTML = q.options.map(opt => `<button onclick=\"checkAnswer('${opt}')\">${opt}</button>`).join(" ");
+    }
+
+    function checkAnswer(opt) {
+      const q = questions[current];
+      if (opt === q.answer) {
+        score++;
+        correctSound.play();
+      } else {
+        wrongSound.play();
+      }
+      current++;
+      document.getElementById("score").innerText = `النقاط: ${score}`;
+      setTimeout(revealCard, 800);
+    }
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صندوق الهوية الإماراتية</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(#fff8dc, #ffe680);
+      text-align: center;
+      direction: rtl;
+      padding: 20px;
+    }
+    h1 {
+      color: #000;
+      font-size: 32px;
+    }
+    .subtitle {
+      font-size: 16px;
+      font-weight: bold;
+      color: green;
+    }
+    #box {
+      margin: 30px auto;
+      width: 220px;
+      height: 220px;
+      background-image: url('box.png');
+      background-size: cover;
+      background-position: center;
+      border: 4px solid #00703c;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .question {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .options button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #eee;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .options button:hover {
+      background-color: #ddd;
+    }
+    #score {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #004d00;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎁 صندوق الهوية الإماراتية</h1>
+  <p class="subtitle">هذا الموقع بتصميم وإعداد وتنفيذ: مساعد سالم الخزيمي</p>
+  <p>اضغط على الصندوق لاكتشاف الأسئلة التفاعلية!</p>
+
+  <div id="box" onclick="revealCard()"></div>
+
+  <div id="question" class="question"></div>
+  <div id="options" class="options"></div>
+  <div id="score">النقاط: 0</div>
+
+  <audio id="openSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7cfc1f91db.mp3?filename=unfold-103126.mp3"></audio>
+  <audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5508ae1195.mp3?filename=magic-chime-7033.mp3"></audio>
+  <audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0099e8d61d.mp3?filename=error-126627.mp3"></audio>
+
+  <script>
+    let current = 0;
+    let score = 0;
+    const openSound = document.getElementById("openSound");
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+
+    const questions = [
+      {
+        q: "ما هو شعار دولة الإمارات؟",
+        options: ["نسر ذهبي", "صقر فضي", "باز أحمر"],
+        answer: "نسر ذهبي"
+      },
+      {
+        q: "كم عدد الإمارات؟",
+        options: ["7", "6", "9"],
+        answer: "7"
+      },
+      {
+        q: "ما اسم العملة الرسمية؟",
+        options: ["درهم", "ريال", "دينار"],
+        answer: "درهم"
+      }
+    ];
+
+    function revealCard() {
+      if (current >= questions.length) {
+        document.getElementById("question").innerHTML = "تم الانتهاء!";
+        document.getElementById("options").innerHTML = "";
+        return;
+      }
+      openSound.play();
+      let q = questions[current];
+      document.getElementById("question").innerText = q.q;
+      document.getElementById("options").innerHTML = q.options.map(opt => `<button onclick=\"checkAnswer('${opt}')\">${opt}</button>`).join(" ");
+    }
+
+    function checkAnswer(opt) {
+      const q = questions[current];
+      if (opt === q.answer) {
+        score++;
+        correctSound.play();
+      } else {
+        wrongSound.play();
+      }
+      current++;
+      document.getElementById("score").innerText = `النقاط: ${score}`;
+      setTimeout(revealCard, 800);
+    }
+  </script>
+</body>
+</html>
