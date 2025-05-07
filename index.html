@@ -33,7 +33,7 @@
       font-size: 20px;
       font-weight: bold;
     }
-    .options button, .options input[type='text'] {
+    .options button {
       margin: 10px;
       padding: 10px 20px;
       font-size: 16px;
@@ -84,21 +84,21 @@
 <body>
   <h1>🎁 عزز هويتك</h1>
   <p class="subtitle">هذا الموقع بتصميم وإعداد وتنفيذ: مساعد سالم الخزيمي</p>
-  <p>اضغط لاكتشاف الأسئلة التفاعلية!</p>
-
   <input type="text" id="nameInput" placeholder="اكتب اسمك هنا للحصول على الشهادة" />
 
   <div id="question" class="question"></div>
   <div id="options" class="options"></div>
   <div id="score">النقاط: 0</div>
 
-  <div id="certificate">
-    🎉 تهانينا! لقد أنهيت التحدي بنجاح. <br>
-    <strong>شهادة تقدير من مساعد سالم الخزيمي:</strong><br>
-    <span id="studentName"></span><br>
-    نُهديك هذه الشهادة تقديرًا لمعرفتك بهوية الإمارات. أنت بطل الهوية!<br>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Coat_of_arms_of_the_United_Arab_Emirates.svg" alt="ختم صقر" style="width:80px; margin-top:15px;">
-  </div>
+  <div id="certificate" style="display: none; background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); border: 5px solid gold; border-radius: 16px; background-color: #fff; color: #000; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.2); position: relative;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/UAE_Emblem.svg" alt="شعار الإمارات" style="position: absolute; top: 10px; left: 10px; width: 60px;">
+  🎉 تهانينا! لقد أنهيت التحدي بنجاح. <br>
+  <strong>شهادة تقدير من مساعد سالم الخزيمي:</strong><br>
+  <span id="studentName" style="display: block; margin-top: 10px; font-size: 22px; color: darkgreen;"></span>
+  نُهديك هذه الشهادة تقديرًا لمعرفتك بهوية الإمارات. أنت بطل الهوية! 🏆<br>
+  <div style="margin-top: 15px; font-size: 14px; color: gray;">تاريخ الإصدار: <span id="dateToday"></span></div>
+</div>
+</div>
   <button id="downloadBtn" onclick="downloadCertificate()">📄 تحميل الشهادة</button>
 
   <script>
@@ -112,8 +112,11 @@
       { q: "ما اسم رئيس دولة الإمارات الحالي؟", options: ["محمد بن زايد", "خليفة بن زايد", "محمد بن راشد"], answer: "محمد بن زايد" },
       { q: "ما هي العاصمة؟", options: ["أبوظبي", "دبي", "الشارقة"], answer: "أبوظبي" },
       { q: "صح أم خطأ: الإمارات تتكون من تسع إمارات.", options: ["صح", "خطأ"], answer: "خطأ" },
-      { q: "أكمل الفراغ: أول رائد فضاء إماراتي هو ___.", type: "fill", answer: "هزاع المنصوري" },
-      // سيتم استكمال باقي الأسئلة (حتى 50) في نفس التنسيق لاحقًا
+      { q: "صح أم خطأ: علم الإمارات يحتوي على أربعة ألوان.", options: ["صح", "خطأ"], answer: "صح" },
+      { q: "متى تم تأسيس الاتحاد؟", options: ["1971", "1981", "1965"], answer: "1971" },
+      { q: "من هو مؤسس دولة الإمارات؟", options: ["زايد بن سلطان", "راشد بن سعيد", "محمد بن زايد"], answer: "زايد بن سلطان" },
+      { q: "ما اسم مسبار الإمارات إلى المريخ؟", options: ["مسبار الأمل", "مسبار النور", "مسبار الفضاء"], answer: "مسبار الأمل" },
+      // سيتم استكمال باقي الأسئلة حتى تصل إلى 50 سؤالاً
     ];
 
     function revealCard() {
@@ -128,24 +131,7 @@
       }
       let q = questions[current];
       document.getElementById("question").innerText = q.q;
-
-      if (q.type === "fill") {
-        document.getElementById("options").innerHTML = `
-          <input type='text' id='fillAnswer' placeholder='اكتب الإجابة هنا'>
-          <button onclick='checkFill()'>إرسال</button>
-        `;
-      } else {
-        document.getElementById("options").innerHTML = q.options.map(opt => `<button onclick="checkAnswer('${opt}')">${opt}</button>`).join(" ");
-      }
-    }
-
-    function checkFill() {
-      const userAnswer = document.getElementById("fillAnswer").value.trim();
-      const correct = questions[current].answer.trim();
-      if (userAnswer === correct) score++;
-      current++;
-      document.getElementById("score").innerText = `النقاط: ${score}`;
-      setTimeout(revealCard, 500);
+      document.getElementById("options").innerHTML = q.options.map(opt => `<button onclick="checkAnswer('${opt}')">${opt}</button>`).join(" ");
     }
 
     function checkAnswer(opt) {
@@ -168,7 +154,12 @@
       });
     }
 
-    window.onload = revealCard;
+    window.onload = function() {
+  revealCard();
+  const today = new Date();
+  const formatted = today.toLocaleDateString('ar-EG');
+  document.getElementById("dateToday").innerText = formatted;
+};
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
