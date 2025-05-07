@@ -1,210 +1,29 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عزز هويتك</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f9d976 0%, #f39f86 100%);
-      background-attachment: fixed;
-      text-align: center;
-      direction: rtl;
-      padding: 20px;
-    }
-    h1 {
-      color: #000;
-      font-size: 32px;
-    }
-    .subtitle {
-      font-size: 16px;
-      font-weight: bold;
-      color: green;
-    }
-    .question {
-      margin-top: 20px;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    .options button {
-      margin: 10px;
-      padding: 14px 26px;
-      font-size: 22px;
-      border: none;
-      border-radius: 8px;
-      background-color: #eee;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .options button:hover {
-      background-color: #ddd;
-    }
-    #score {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #004d00;
-    }
-    #certificate {
-      display: none;
-      margin-top: 30px;
-      padding: 20px;
-      border: 2px dashed #000;
-      background-color: #fff;
-      color: #000;
-      font-size: 20px;
-      border-radius: 12px;
-    }
-    #downloadBtn {
-      display: none;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #00703c;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    #nameInput {
-      margin-top: 20px;
-      padding: 8px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-  </style>
-</head>
-<body>
-  <h1>🎁 عزز هويتك</h1>
-  <p class="subtitle">هذا الموقع بتصميم وإعداد وتنفيذ: مساعد سالم الخزيمي</p>
-  <input type="text" id="nameInput" placeholder="اكتب اسمك هنا للحصول على الشهادة" />
+// تمت إضافة فاصل واضح بين المراحل
+function showQuestion() {
+  const q = questions[currentQuestion];
+  const stage = Math.floor(currentQuestion / 10) + 1;
+  document.getElementById("question").innerHTML = `
+    <div style='background-color: #ffd700; color: #000; font-size: 26px; padding: 12px; border-radius: 10px; margin-bottom: 20px;'>🎯 المرحلة ${stage}</div>
+    <div style='font-size: 36px; font-weight: bold; margin-bottom: 20px;'>${q.question}</div>
+  `;
+  const shuffled = shuffleOptions(q.options);
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+  shuffled.forEach(option => {
+    const btn = document.createElement("button");
+    btn.innerText = option;
+    btn.style.margin = "12px";
+    btn.style.padding = "16px 28px";
+    btn.style.fontSize = "24px";
+    btn.style.border = "none";
+    btn.style.borderRadius = "10px";
+    btn.style.backgroundColor = "#eee";
+    btn.style.cursor = "pointer";
+    btn.onmouseover = () => btn.style.backgroundColor = "#ddd";
+    btn.onmouseout = () => btn.style.backgroundColor = "#eee";
+    btn.onclick = () => checkAnswer(option);
+    optionsDiv.appendChild(btn);
+  });
+}
 
-  <div id="question" class="question"></div>
-  <div id="options" class="options"></div>
-  <div id="score">النقاط: 0</div>
-  <div id="timer" style="margin-top:10px; font-weight:bold; color:red;">⏳ الوقت: 15</div>
-
-  <div id="certificate" style="display: none; background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); border: 5px solid gold; border-radius: 16px; background-color: #fff; color: #000; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.2); position: relative;">
-    🎉 تهانينا! لقد أنهيت التحدي بنجاح. <br>
-    <strong>شهادة تقدير من مساعد سالم الخزيمي:</strong><br>
-    <span id="studentName" style="display: block; margin-top: 10px; font-size: 22px; color: darkgreen;"></span>
-    نُهديك هذه الشهادة تقديرًا لمعرفتك بهوية الإمارات. أنت بطل الهوية! 🏆<br>
-    <div style="margin-top: 15px; font-size: 14px; color: gray;">تاريخ الإصدار: <span id="dateToday"></span></div>
-  </div>
-  <button id="downloadBtn" onclick="downloadCertificate()">📄 تحميل الشهادة</button>
-
-  <script>
-    const questions = [
-      {
-        question: "ما هي العاصمة الرسمية لدولة الإمارات؟",
-        options: ["دبي", "الشارقة", "أبوظبي"],
-        answer: "أبوظبي"
-      },
-      {
-        question: "متى تم إعلان اتحاد دولة الإمارات؟",
-        options: ["1971", "1981", "1965"],
-        answer: "1971"
-      },
-      {
-        question: "كم عدد الإمارات في دولة الإمارات العربية المتحدة؟",
-        options: ["6", "7", "8"],
-        answer: "7"
-      },
-      {
-        question: "من هو مؤسس دولة الإمارات؟",
-        options: ["الشيخ خليفة", "الشيخ محمد بن راشد", "الشيخ زايد بن سلطان"],
-        answer: "الشيخ زايد بن سلطان"
-      },
-      {
-        question: "ما هو اسم العملة الرسمية لدولة الإمارات؟",
-        options: ["درهم", "ريال", "دينار"],
-        answer: "درهم"
-      }
-    ];
-
-    let currentQuestion = 0;
-    let score = 0;
-
-    function shuffleOptions(options, answer) {
-      const arr = [...options];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    function showQuestion() {
-      const q = questions[currentQuestion];
-      document.getElementById("question").innerText = q.question;
-      const shuffled = shuffleOptions(q.options, q.answer);
-      const optionsDiv = document.getElementById("options");
-      optionsDiv.innerHTML = "";
-      shuffled.forEach(option => {
-        const btn = document.createElement("button");
-        btn.innerText = option;
-        btn.onclick = () => checkAnswer(option);
-        optionsDiv.appendChild(btn);
-      });
-    }
-
-    function checkAnswer(selected) {
-      const correct = questions[currentQuestion].answer;
-      if (selected === correct) {
-        score++;
-        document.getElementById("correctSound").play();
-      } else {
-        document.getElementById("wrongSound").play();
-      }
-      document.getElementById("score").innerText = `النقاط: ${score}`;
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
-        showQuestion();
-      } else {
-        showCertificate();
-      }
-    }
-
-    function showCertificate() {
-      document.getElementById("certificate").style.display = "block";
-      document.getElementById("studentName").innerText = document.getElementById("nameInput").value;
-      const today = new Date();
-      document.getElementById("dateToday").innerText = today.toLocaleDateString('ar-EG');
-      document.getElementById("downloadBtn").style.display = "inline-block";
-    }
-
-    function downloadCertificate() {
-      html2canvas(document.getElementById("certificate")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "شهادة_عزز_هويتك.png";
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-
-    showQuestion();
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-  <audio id="welcomeAudio" src="https://cdn.pixabay.com/download/audio/2023/03/01/audio_3f460db385.mp3?filename=arabic-intro-139447.mp3"></audio>
-  <script>
-    let audioStarted = false;
-    function playWelcomeSound() {
-      if (!audioStarted) {
-        document.getElementById("welcomeAudio").play();
-        audioStarted = true;
-      }
-    }
-    document.addEventListener("click", playWelcomeSound);
-  </script>
-  <audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_38c5e8e3fa.mp3?filename=correct-6033.mp3"></audio>
-  <audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6b3a59fabc.mp3?filename=wrong-6034.mp3"></audio>
-  <audio id="timeoutSound" src="https://cdn.pixabay.com/download/audio/2021/09/08/audio_77cb4ba71a.mp3?filename=alert-7393.mp3"></audio>
-
-  <div style="margin-top: 40px;">
-    <img src="https://raw.githubusercontent.com/Mesaedalkhuzaimi/identity-box-assets/main/instagram-barcode.jpg" alt="إنستغرام مساعد" style="width: 160px; height: auto;" />
-    <div style="font-size: 14px; color: #555; margin-top: 5px;">تابعوني على إنستغرام</div>
-  </div>
-</body>
-</html>
+showQuestion();
