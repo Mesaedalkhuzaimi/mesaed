@@ -13,10 +13,6 @@
       direction: rtl;
       padding: 20px;
     }
-    
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
     h1 {
       color: #000;
       font-size: 32px;
@@ -28,13 +24,13 @@
     }
     .question {
       margin-top: 20px;
-      font-size: 20px;
+      font-size: 28px;
       font-weight: bold;
     }
     .options button {
       margin: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 14px 26px;
+      font-size: 22px;
       border: none;
       border-radius: 8px;
       background-color: #eee;
@@ -87,168 +83,128 @@
   <div id="question" class="question"></div>
   <div id="options" class="options"></div>
   <div id="score">النقاط: 0</div>
-<div id="timer" style="margin-top:10px; font-weight:bold; color:red;">⏳ الوقت: 15</div>
+  <div id="timer" style="margin-top:10px; font-weight:bold; color:red;">⏳ الوقت: 15</div>
 
   <div id="certificate" style="display: none; background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); border: 5px solid gold; border-radius: 16px; background-color: #fff; color: #000; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.2); position: relative;">
-  
-  🎉 تهانينا! لقد أنهيت التحدي بنجاح. <br>
-  <strong>شهادة تقدير من مساعد سالم الخزيمي:</strong><br>
-  <span id="studentName" style="display: block; margin-top: 10px; font-size: 22px; color: darkgreen;"></span>
-  نُهديك هذه الشهادة تقديرًا لمعرفتك بهوية الإمارات. أنت بطل الهوية! 🏆<br>
-  <div style="margin-top: 15px; font-size: 14px; color: gray;">تاريخ الإصدار: <span id="dateToday"></span></div>
-</div>
-</div>
+    🎉 تهانينا! لقد أنهيت التحدي بنجاح. <br>
+    <strong>شهادة تقدير من مساعد سالم الخزيمي:</strong><br>
+    <span id="studentName" style="display: block; margin-top: 10px; font-size: 22px; color: darkgreen;"></span>
+    نُهديك هذه الشهادة تقديرًا لمعرفتك بهوية الإمارات. أنت بطل الهوية! 🏆<br>
+    <div style="margin-top: 15px; font-size: 14px; color: gray;">تاريخ الإصدار: <span id="dateToday"></span></div>
+  </div>
   <button id="downloadBtn" onclick="downloadCertificate()">📄 تحميل الشهادة</button>
 
   <script>
-    let current = 0;
+    const questions = [
+      {
+        question: "ما هي العاصمة الرسمية لدولة الإمارات؟",
+        options: ["دبي", "الشارقة", "أبوظبي"],
+        answer: "أبوظبي"
+      },
+      {
+        question: "متى تم إعلان اتحاد دولة الإمارات؟",
+        options: ["1971", "1981", "1965"],
+        answer: "1971"
+      },
+      {
+        question: "كم عدد الإمارات في دولة الإمارات العربية المتحدة؟",
+        options: ["6", "7", "8"],
+        answer: "7"
+      },
+      {
+        question: "من هو مؤسس دولة الإمارات؟",
+        options: ["الشيخ خليفة", "الشيخ محمد بن راشد", "الشيخ زايد بن سلطان"],
+        answer: "الشيخ زايد بن سلطان"
+      },
+      {
+        question: "ما هو اسم العملة الرسمية لدولة الإمارات؟",
+        options: ["درهم", "ريال", "دينار"],
+        answer: "درهم"
+      }
+    ];
+
+    let currentQuestion = 0;
     let score = 0;
 
-    const questions = [
-  // المرحلة 1: التأسيس
-  { q: "— المرحلة 1: التأسيس —", options: ["تابع"], answer: "تابع" },
-  { q: "متى تأسست دولة الإمارات؟", options: ["1971", "1975", "1981"], answer: "1971" },
-  { q: "كم عدد الإمارات المكونة للدولة؟", options: ["6", "7", "8"], answer: "7" },
-  { q: "من هو مؤسس دولة الإمارات؟", options: ["زايد بن سلطان", "خليفة بن زايد", "محمد بن راشد"], answer: "زايد بن سلطان" },
-  { q: "ما اسم الوثيقة التي وقّعها الحكام لتأسيس الاتحاد؟", options: ["دستور الإمارات", "اتفاق الوحدة", "وثيقة الاتحاد"], answer: "وثيقة الاتحاد" },
-  { q: "أين تم توقيع اتفاقية الاتحاد؟", options: ["قصر الحصن", "قصر الضيافة بدبي", "قصر الوطن"], answer: "قصر الضيافة بدبي" },
-  { q: "ما اسم المجلس الأعلى الذي يضم حكام الإمارات؟", options: ["المجلس الأعلى للاتحاد", "مجلس الوزراء", "المجلس الوطني"], answer: "المجلس الأعلى للاتحاد" },
-  { q: "من أول رئيس لدولة الإمارات؟", options: ["زايد بن سلطان", "راشد بن سعيد", "محمد بن راشد"], answer: "زايد بن سلطان" },
-  { q: "متى انضمت رأس الخيمة للاتحاد؟", options: ["1971", "1972", "1973"], answer: "1972" },
-  { q: "صح أم خطأ: الإمارات بدأت بست إمارات فقط.", options: ["صح", "خطأ"], answer: "صح" },
-
-  // المرحلة 2: الرموز الوطنية
-  { q: "— المرحلة 2: الرموز الوطنية —", options: ["تابع"], answer: "تابع" },
-  { q: "ما هي ألوان علم الإمارات؟", options: ["أحمر، أخضر، أبيض، أسود", "أصفر، أزرق، أبيض، أسود", "أخضر، أبيض، أحمر، أزرق"], answer: "أحمر، أخضر، أبيض، أسود" },
-  { q: "من صمم علم دولة الإمارات؟", options: ["عبدالله المعينة", "زايد بن سلطان", "راشد بن سعيد"], answer: "عبدالله المعينة" },
-  { q: "ما اسم النشيد الوطني؟", options: ["عيشي بلادي", "أنا إماراتي", "حب الوطن"], answer: "عيشي بلادي" },
-  { q: "ما هو الشعار الرسمي للإمارات؟", options: ["صقر ذهبي", "نخلة خضراء", "حصن أبيض"], answer: "صقر ذهبي" },
-  { q: "ما هي العملة الرسمية؟", options: ["درهم إماراتي", "ريال خليجي", "دينار عربي"], answer: "درهم إماراتي" },
-  { q: "ما لون الصقر في شعار الإمارات؟", options: ["ذهبي", "أسود", "فضي"], answer: "ذهبي" },
-  { q: "صح أم خطأ: لون الشريط الرأسي في العلم هو الأخضر.", options: ["صح", "خطأ"], answer: "خطأ" },
-  { q: "من كتب كلمات النشيد الوطني؟", options: ["عارف الشيخ", "زايد بن سلطان", "راشد الخضر"], answer: "عارف الشيخ" },
-  { q: "ما رمز القوة في شعار الإمارات؟", options: ["الصقر", "النخلة", "البرج"], answer: "الصقر" },
-
-  // المرحلة 3: الإنجازات الوطنية
-  { q: "— المرحلة 3: الإنجازات الوطنية —", options: ["تابع"], answer: "تابع" },
-  { q: "ما اسم أول رائد فضاء إماراتي؟", options: ["هزاع المنصوري", "سلطان النيادي", "محمد العتيبة"], answer: "هزاع المنصوري" },
-  { q: "ما اسم المسبار الإماراتي الذي وصل إلى المريخ؟", options: ["مسبار الأمل", "مسبار الغد", "مسبار زايد"], answer: "مسبار الأمل" },
-  { q: "ما اسم المعرض العالمي الذي استضافته الإمارات في 2021؟", options: ["إكسبو 2020", "إكسبو 2022", "إكسبو الخليج"], answer: "إكسبو 2020" },
-  { q: "أين يقع متحف المستقبل؟", options: ["دبي", "أبوظبي", "الشارقة"], answer: "دبي" },
-  { q: "صح أم خطأ: الإمارات أول دولة عربية تصل إلى المريخ.", options: ["صح", "خطأ"], answer: "صح" },
-  { q: "ما اسم أطول برج في العالم؟", options: ["برج خليفة", "برج العرب", "برج الاتحاد"], answer: "برج خليفة" },
-  { q: "متى تم افتتاح متحف اللوفر أبوظبي؟", options: ["2017", "2018", "2015"], answer: "2017" },
-  { q: "من شارك في أطول مهمة فضائية إماراتية؟", options: ["سلطان النيادي", "هزاع المنصوري", "محمد بن راشد"], answer: "سلطان النيادي" },
-  { q: "ما اسم أول محطة نووية في الإمارات؟", options: ["براكة", "الشيخ زايد", "نور"], answer: "براكة" },
-
-  // المرحلة 4: القيم والعادات
-  { q: "— المرحلة 4: القيم والعادات —", options: ["تابع"], answer: "تابع" },
-  { q: "ما هي التحية الإماراتية التقليدية؟", options: ["السلام بالأنف", "السلام باليد", "السلام بالكف"], answer: "السلام بالأنف" },
-  { q: "ما هو المشروب الشعبي المعروف في الضيافة الإماراتية؟", options: ["القهوة العربية", "الشاي الأحمر", "اللبن"], answer: "القهوة العربية" },
-  { q: "ما اسم الزي التقليدي للرجال؟", options: ["كندورة", "عباءة", "سروال"], answer: "كندورة" },
-  { q: "ما اسم الزي التقليدي للنساء؟", options: ["عباءة", "برقع", "شيلة"], answer: "عباءة" },
-  { q: "صح أم خطأ: المجالس في الإمارات مكان للحوار والضيافة.", options: ["صح", "خطأ"], answer: "صح" },
-  { q: "ما اسم البيت المصنوع من سعف النخل؟", options: ["العريش", "المجلس", "السرود"], answer: "العريش" },
-  { q: "ما رمز الكرم في المجتمع الإماراتي؟", options: ["الدلة", "التمر", "المهفة"], answer: "الدلة" },
-  { q: "ما اسم الأداة التي يُحمل بها التمر؟", options: ["السرود", "الدلو", "المشخال"], answer: "السرود" },
-  { q: "صح أم خطأ: يستخدم الإماراتيون الخوص في بناء البيوت التقليدية.", options: ["صح", "خطأ"], answer: "صح" },
-
-  // المرحلة 5: الإمارات اليوم والمستقبل
-  { q: "— المرحلة 5: الإمارات اليوم والمستقبل —", options: ["تابع"], answer: "تابع" },
-  { q: "من هو رئيس دولة الإمارات اليوم؟", options: ["محمد بن زايد", "راشد بن مكتوم", "خليفة بن زايد"], answer: "محمد بن زايد" },
-  { q: "من هو حاكم دبي ونائب رئيس الدولة؟", options: ["محمد بن راشد", "سيف بن زايد", "منصور بن زايد"], answer: "محمد بن راشد" },
-  { q: "كم عدد سكان الإمارات تقريباً؟", options: ["أكثر من 9 ملايين", "أكثر من 5 ملايين", "أكثر من 20 مليون"], answer: "أكثر من 9 ملايين" },
-  { q: "ما اسم مدينة مصدر؟", options: ["مدينة بيئية ذكية", "مدينة أثرية", "مدينة صناعية"], answer: "مدينة بيئية ذكية" },
-  { q: "ما اسم البرنامج الوطني لتأهيل الشباب للمستقبل؟", options: ["رواد المستقبل", "الجيل الجديد", "الهوية 2071"], answer: "الهوية 2071" },
-  { q: "صح أم خطأ: الإمارات من أوائل الدول التي تبنت الذكاء الاصطناعي.", options: ["صح", "خطأ"], answer: "صح" },
-  { q: "ما اسم الاستراتيجية التي تهدف لجعل الإمارات الأفضل عالميًا؟", options: ["مئوية الإمارات 2071", "استراتيجية الأمل", "رؤية الاتحاد"], answer: "مئوية الإمارات 2071" },
-  { q: "ما اسم المبادرة الخاصة بالاستدامة في عام 2023؟", options: ["عام الاستدامة", "عام الابتكار", "عام الذكاء"], answer: "عام الاستدامة" },
-  { q: "أين استضافت الإمارات مؤتمر المناخ COP28؟", options: ["دبي", "أبوظبي", "الشارقة"], answer: "دبي" }
-];
-
-    let timer;
-let timeLeft = 15;
-
-function revealCard() {
-  if (current >= questions.length) {
-    document.getElementById("question").innerHTML = "تم الانتهاء!";
-    document.getElementById("options").innerHTML = "";
-    const name = document.getElementById("nameInput").value || "المشارك";
-    document.getElementById("studentName").innerText = `🌟 ${name}`;
-    document.getElementById("certificate").style.display = "block";
-    document.getElementById("downloadBtn").style.display = "inline-block";
-    document.getElementById("timer").style.display = "none";
-    return;
-  }
-  let q = questions[current];
-  document.getElementById("question").innerText = q.q;
-  document.getElementById("options").innerHTML = q.options.map(opt => `<button onclick="checkAnswer('${opt}')">${opt}</button>`).join(" ");
-
-  timeLeft = 15;
-  document.getElementById("timer").innerText = `⏳ الوقت: ${timeLeft}`;
-  clearInterval(timer);
-  timer = setInterval(() => {
-    timeLeft--;
-    document.getElementById("timer").innerText = `⏳ الوقت: ${timeLeft}`;
-    if (timeLeft === 0) {
-      clearInterval(timer);
-      document.getElementById("timeoutSound").play();
-      current++;
-      document.getElementById("score").innerText = `النقاط: ${score}`;
-      revealCard();
-    }
-  }, 1000);
+    function shuffleOptions(options, answer) {
+      const arr = [...options];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
     }
 
-    function checkAnswer(opt) {
-  const q = questions[current];
-  if (opt === q.answer) {
-    score++;
-    document.getElementById("correctSound").play();
-  } else {
-    document.getElementById("wrongSound").play();
-  }
-  current++;
-  document.getElementById("score").innerText = `النقاط: ${score}`;
-  clearInterval(timer);
-  setTimeout(revealCard, 500);
-}
-      current++;
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").innerText = q.question;
+      const shuffled = shuffleOptions(q.options, q.answer);
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      shuffled.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const correct = questions[currentQuestion].answer;
+      if (selected === correct) {
+        score++;
+        document.getElementById("correctSound").play();
+      } else {
+        document.getElementById("wrongSound").play();
+      }
       document.getElementById("score").innerText = `النقاط: ${score}`;
-      setTimeout(revealCard, 500);
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        showCertificate();
+      }
+    }
+
+    function showCertificate() {
+      document.getElementById("certificate").style.display = "block";
+      document.getElementById("studentName").innerText = document.getElementById("nameInput").value;
+      const today = new Date();
+      document.getElementById("dateToday").innerText = today.toLocaleDateString('ar-EG');
+      document.getElementById("downloadBtn").style.display = "inline-block";
     }
 
     function downloadCertificate() {
-      const cert = document.getElementById("certificate");
-      html2canvas(cert).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'شهادة_عزز_هويتك.png';
+      html2canvas(document.getElementById("certificate")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "شهادة_عزز_هويتك.png";
         link.href = canvas.toDataURL();
         link.click();
       });
     }
 
-    window.onload = function() {
-  revealCard();
-  const today = new Date();
-  const formatted = today.toLocaleDateString('ar-EG');
-  document.getElementById("dateToday").innerText = formatted;
-};
+    showQuestion();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<audio id="welcomeAudio" src="https://cdn.pixabay.com/download/audio/2023/03/01/audio_3f460db385.mp3?filename=arabic-intro-139447.mp3"></audio>
-<script>
-  let audioStarted = false;
-  function playWelcomeSound() {
-    if (!audioStarted) {
-      document.getElementById("welcomeAudio").play();
-      audioStarted = true;
+
+  <audio id="welcomeAudio" src="https://cdn.pixabay.com/download/audio/2023/03/01/audio_3f460db385.mp3?filename=arabic-intro-139447.mp3"></audio>
+  <script>
+    let audioStarted = false;
+    function playWelcomeSound() {
+      if (!audioStarted) {
+        document.getElementById("welcomeAudio").play();
+        audioStarted = true;
+      }
     }
-  }
-  document.addEventListener("click", playWelcomeSound);
-</script>
-<audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_38c5e8e3fa.mp3?filename=correct-6033.mp3"></audio>
-<audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6b3a59fabc.mp3?filename=wrong-6034.mp3"></audio>
-<audio id="timeoutSound" src="https://cdn.pixabay.com/download/audio/2021/09/08/audio_77cb4ba71a.mp3?filename=alert-7393.mp3"></audio>
+    document.addEventListener("click", playWelcomeSound);
+  </script>
+  <audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_38c5e8e3fa.mp3?filename=correct-6033.mp3"></audio>
+  <audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6b3a59fabc.mp3?filename=wrong-6034.mp3"></audio>
+  <audio id="timeoutSound" src="https://cdn.pixabay.com/download/audio/2021/09/08/audio_77cb4ba71a.mp3?filename=alert-7393.mp3"></audio>
+
+  <div style="margin-top: 40px;">
+    <img src="https://raw.githubusercontent.com/Mesaedalkhuzaimi/identity-box-assets/main/instagram-barcode.jpg" alt="إنستغرام مساعد" style="width: 160px; height: auto;" />
+    <div style="font-size: 14px; color: #555; margin-top: 5px;">تابعوني على إنستغرام</div>
+  </div>
 </body>
 </html>
