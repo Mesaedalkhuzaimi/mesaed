@@ -1,29 +1,80 @@
-// تمت إضافة فاصل واضح بين المراحل
-function showQuestion() {
-  const q = questions[currentQuestion];
-  const stage = Math.floor(currentQuestion / 10) + 1;
-  document.getElementById("question").innerHTML = `
-    <div style='background-color: #ffd700; color: #000; font-size: 26px; padding: 12px; border-radius: 10px; margin-bottom: 20px;'>🎯 المرحلة ${stage}</div>
-    <div style='font-size: 36px; font-weight: bold; margin-bottom: 20px;'>${q.question}</div>
-  `;
-  const shuffled = shuffleOptions(q.options);
-  const optionsDiv = document.getElementById("options");
-  optionsDiv.innerHTML = "";
-  shuffled.forEach(option => {
-    const btn = document.createElement("button");
-    btn.innerText = option;
-    btn.style.margin = "12px";
-    btn.style.padding = "16px 28px";
-    btn.style.fontSize = "24px";
-    btn.style.border = "none";
-    btn.style.borderRadius = "10px";
-    btn.style.backgroundColor = "#eee";
-    btn.style.cursor = "pointer";
-    btn.onmouseover = () => btn.style.backgroundColor = "#ddd";
-    btn.onmouseout = () => btn.style.backgroundColor = "#eee";
-    btn.onclick = () => checkAnswer(option);
-    optionsDiv.appendChild(btn);
-  });
-}
-
-showQuestion();
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>عزز هويتك</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #f9d976 0%, #f39f86 100%);
+      text-align: center;
+      direction: rtl;
+      padding: 20px;
+    }
+    .question {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎁 عزز هويتك</h1>
+  <div id="question" class="question"></div>
+  <div id="options" class="options"></div>
+  <div id="score">النقاط: 0</div>
+  <script>
+    const questions = [
+      { question: "ما هي العاصمة الرسمية لدولة الإمارات؟", options: ["دبي", "الشارقة", "أبوظبي"], answer: "أبوظبي" },
+      { question: "متى تم إعلان اتحاد دولة الإمارات؟", options: ["1971", "1981", "1965"], answer: "1971" },
+      { question: "كم عدد الإمارات؟", options: ["6", "7", "8"], answer: "7" },
+      { question: "من هو مؤسس دولة الإمارات؟", options: ["الشيخ خليفة", "الشيخ محمد", "الشيخ زايد بن سلطان"], answer: "الشيخ زايد بن سلطان" },
+      { question: "ما هي العملة الرسمية؟", options: ["درهم", "ريال", "دينار"], answer: "درهم" }
+    ];
+    let currentQuestion = 0;
+    let score = 0;
+    function shuffleOptions(options) {
+      const arr = [...options];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      const stage = Math.floor(currentQuestion / 10) + 1;
+      document.getElementById("question").innerHTML = \`
+        <div style='background-color: #ffd700; color: #000; font-size: 26px; padding: 12px; border-radius: 10px; margin-bottom: 20px;'>🎯 المرحلة \${stage}</div>
+        <div style='font-size: 36px; font-weight: bold; margin-bottom: 20px;'>\${q.question}</div>
+      \`;
+      const shuffled = shuffleOptions(q.options);
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      shuffled.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        btn.style.margin = "12px";
+        btn.style.padding = "16px 28px";
+        btn.style.fontSize = "24px";
+        btn.style.border = "none";
+        btn.style.borderRadius = "10px";
+        btn.style.backgroundColor = "#eee";
+        btn.style.cursor = "pointer";
+        btn.onmouseover = () => btn.style.backgroundColor = "#ddd";
+        btn.onmouseout = () => btn.style.backgroundColor = "#eee";
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+    function checkAnswer(selected) {
+      const correct = questions[currentQuestion].answer;
+      if (selected === correct) score++;
+      document.getElementById("score").innerText = \`النقاط: \${score}\`;
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      }
+    }
+    showQuestion();
+  </script>
+</body>
+</html>
