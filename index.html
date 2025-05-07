@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -6,74 +7,140 @@
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f9d976 0%, #f39f86 100%);
+      background: linear-gradient(135deg, #fffce1, #ffe0b2);
+      margin: 0;
+      padding: 0;
       text-align: center;
       direction: rtl;
-      padding: 20px;
+    }
+    header {
+      background-color: #004d40;
+      color: gold;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .stage-label {
+      background-color: #ffd700;
+      color: #000;
+      font-size: 26px;
+      padding: 12px;
+      border-radius: 10px;
+      margin: 20px auto 10px;
+      width: fit-content;
     }
     .question {
-      margin-top: 20px;
+      font-size: 36px;
+      font-weight: bold;
+      margin: 20px auto;
+    }
+    .options button {
+      margin: 12px;
+      padding: 16px 28px;
+      font-size: 24px;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff8e1;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .options button:hover {
+      background-color: #ffecb3;
+    }
+    #score {
+      font-size: 20px;
+      color: green;
+      margin-top: 10px;
+    }
+    footer {
+      margin-top: 30px;
+    }
+    #certificate {
+      display: none;
+      margin-top: 30px;
+      padding: 20px;
+      border: 2px dashed #000;
+      background-color: #fff;
+      color: #000;
+      font-size: 20px;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>🎁 عزز هويتك</h1>
-  <div id="question" class="question"></div>
-  <div id="options" class="options"></div>
-  <div id="score">النقاط: 0</div>
+  <header>إعداد وتنفيذ وفكرة: مساعد سالم الخزيمي</header>
+  <div id="quiz">
+    <div id="stage" class="stage-label"></div>
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="score">النقاط: 0</div>
+    <div id="timer" style="color: red; font-weight: bold; margin-top: 10px;">⏳ الوقت: 15</div>
+  </div>
+  <div id="certificate"></div>
+  <footer>
+    <img src="https://raw.githubusercontent.com/Mesaedalkhuzaimi/identity-box-assets/main/instagram-barcode.jpg" alt="باركود إنستغرام" width="140">
+    <p>تابعونا على إنستغرام</p>
+  </footer>
+
   <script>
-    const questions = [
-      { question: "ما هي العاصمة الرسمية لدولة الإمارات؟", options: ["دبي", "الشارقة", "أبوظبي"], answer: "أبوظبي" },
-      { question: "متى تم إعلان اتحاد دولة الإمارات؟", options: ["1971", "1981", "1965"], answer: "1971" },
-      { question: "كم عدد الإمارات؟", options: ["6", "7", "8"], answer: "7" },
-      { question: "من هو مؤسس دولة الإمارات؟", options: ["الشيخ خليفة", "الشيخ محمد", "الشيخ زايد بن سلطان"], answer: "الشيخ زايد بن سلطان" },
-      { question: "ما هي العملة الرسمية؟", options: ["درهم", "ريال", "دينار"], answer: "درهم" }
-    ];
-    let currentQuestion = 0;
-    let score = 0;
-    function shuffleOptions(options) {
-      const arr = [...options];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-    function showQuestion() {
-      const q = questions[currentQuestion];
-      const stage = Math.floor(currentQuestion / 10) + 1;
-      document.getElementById("question").innerHTML = \`
-        <div style='background-color: #ffd700; color: #000; font-size: 26px; padding: 12px; border-radius: 10px; margin-bottom: 20px;'>🎯 المرحلة \${stage}</div>
-        <div style='font-size: 36px; font-weight: bold; margin-bottom: 20px;'>\${q.question}</div>
-      \`;
-      const shuffled = shuffleOptions(q.options);
-      const optionsDiv = document.getElementById("options");
-      optionsDiv.innerHTML = "";
-      shuffled.forEach(option => {
-        const btn = document.createElement("button");
-        btn.innerText = option;
-        btn.style.margin = "12px";
-        btn.style.padding = "16px 28px";
-        btn.style.fontSize = "24px";
-        btn.style.border = "none";
-        btn.style.borderRadius = "10px";
-        btn.style.backgroundColor = "#eee";
-        btn.style.cursor = "pointer";
-        btn.onmouseover = () => btn.style.backgroundColor = "#ddd";
-        btn.onmouseout = () => btn.style.backgroundColor = "#eee";
-        btn.onclick = () => checkAnswer(option);
-        optionsDiv.appendChild(btn);
+    const questions = [];
+    for (let i = 1; i <= 50; i++) {
+      questions.push({
+        question: `سؤال رقم ${i}: ما هي إحدى الحقائق عن دولة الإمارات؟`,
+        options: [`إجابة أ ${i}`, `إجابة ب ${i}`, `إجابة صحيحة ${i}`],
+        answer: `إجابة صحيحة ${i}`
       });
     }
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      const stageNum = Math.floor(currentQuestion / 10) + 1;
+      document.getElementById("stage").innerText = `🎯 المرحلة ${stageNum}`;
+      document.getElementById("question").innerText = q.question;
+
+      const options = shuffle([...q.options]);
+      const container = document.getElementById("options");
+      container.innerHTML = "";
+      options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(opt);
+        container.appendChild(btn);
+      });
+    }
+
     function checkAnswer(selected) {
-      const correct = questions[currentQuestion].answer;
-      if (selected === correct) score++;
-      document.getElementById("score").innerText = \`النقاط: \${score}\`;
+      if (selected === questions[currentQuestion].answer) {
+        score++;
+      }
+      document.getElementById("score").innerText = `النقاط: ${score}`;
       currentQuestion++;
       if (currentQuestion < questions.length) {
         showQuestion();
+      } else {
+        showCertificate();
       }
     }
+
+    function showCertificate() {
+      document.getElementById("quiz").style.display = "none";
+      const cert = document.getElementById("certificate");
+      cert.innerHTML = `
+        <h2>🎓 شهادة إنجاز</h2>
+        <p>نُهديك هذه الشهادة تقديرًا لمعرفتك بالهوية الوطنية لدولة الإمارات.</p>
+        <p><strong>عدد النقاط: ${score} من ${questions.length}</strong></p>
+        <p>إعداد وتنفيذ وفكرة: مساعد سالم الخزيمي</p>
+      `;
+      cert.style.display = "block";
+    }
+
     showQuestion();
   </script>
 </body>
