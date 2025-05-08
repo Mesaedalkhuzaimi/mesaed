@@ -1,229 +1,33 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>عزز هويتك</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #fffce1, #ffe0b2);
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      direction: rtl;
-      position: relative;
-    }
-    header {
-      background-color: #004d40;
-      color: gold;
-      padding: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      position: relative;
-    }
-    .visitor-counter {
-      position: absolute;
-      left: 10px;
-      top: 10px;
-    }
-    .stage-label {
-      background-color: #ffd700;
-      color: #000;
-      font-size: 26px;
-      padding: 12px;
-      border-radius: 10px;
-      margin: 20px auto 10px;
-      width: fit-content;
-    }
-    .question {
-      font-size: 36px;
-      font-weight: bold;
-      margin: 20px auto;
-    }
-    .options button {
-      margin: 12px;
-      padding: 16px 28px;
-      font-size: 24px;
-      border: none;
-      border-radius: 10px;
-      background-color: #fff8e1;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .options button:hover {
-      background-color: #ffecb3;
-    }
-    #score {
-      font-size: 20px;
-      color: green;
-      margin-top: 10px;
-    }
-    footer {
-      margin-top: 30px;
-    }
-    #certificate {
-      display: none;
-      margin-top: 30px;
-      padding: 20px;
-      border: 2px dashed #000;
-      background-color: #fff;
-      color: #000;
-      font-size: 22px;
-      border-radius: 12px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .insta-icon {
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    فكرة وتصميم وتنفيذ: مساعد سالم الخزيمي
-    <div class="visitor-counter">
-      <a href="https://www.hitwebcounter.com" target="_blank">
-        <img src="https://hitwebcounter.com/counter/counter.php?page=20600470&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" alt="Visit counter" border="0">
-      </a>
-    </div>
-  </header>
 
-  <div id="quiz">
-    <div id="stage" class="stage-label"></div>
-    <div id="question" class="question"></div>
-    <div id="options" class="options"></div>
-    <div id="score">النقاط: 0</div>
-    <div id="timer" style="color: red; font-weight: bold; margin-top: 10px;">⏳ الوقت: 15</div>
-  </div>
-
-  <div id="certificate"></div>
-
-  <footer>
-    <a href="https://www.instagram.com/mesaed.alkhuzaimi" target="_blank">
-      <img class="insta-icon" src="https://cdn-icons-png.flaticon.com/512/174/174855.png" width="50" alt="Instagram" />
-    </a>
-  </footer>
-
-  <script>
-    const questions = [
-      {question:"متى تأسست دولة الإمارات؟", options:["1971", "1981", "1965"], answer:"1971"},
-      {question:"من هو مؤسس الإمارات؟", options:["الشيخ زايد", "الشيخ راشد", "الشيخ خليفة"], answer:"الشيخ زايد"},
-      {question:"عاصمة دولة الإمارات؟", options:["دبي", "أبوظبي", "الشارقة"], answer:"أبوظبي"},
-      {question:"كم عدد الإمارات؟", options:["5", "7", "9"], answer:"7"},
-      {question:"عملة الإمارات الرسمية؟", options:["درهم", "ريال", "دينار"], answer:"درهم"},
-      {question:"لون السلام في علم الإمارات؟", options:["الأبيض", "الأخضر", "الأسود"], answer:"الأبيض"},
-      {question:"أين يقع متحف المستقبل؟", options:["دبي", "أبوظبي", "الشارقة"], answer:"دبي"},
-      {question:"أول رائد فضاء إماراتي؟", options:["هزاع المنصوري", "سلطان النيادي", "راشد الطاير"], answer:"هزاع المنصوري"},
-      {question:"كم عدد ألوان علم الإمارات؟", options:["3", "4", "5"], answer:"4"},
-      {question:"اسم المسبار الإماراتي للمريخ؟", options:["الأمل", "زايد", "الوطن"], answer:"الأمل"},
-      {question:"هل الشيخ زايد هو أول رئيس لدولة الإمارات؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل العملة الرسمية هي الدينار؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل الإمارات تطل على البحر الأحمر؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل إمارة عجمان هي الأكبر؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل العلم يحتوي على اللون الأزرق؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل الإمارات تقع في آسيا؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل الشارقة عاصمة ثقافية؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل أبوظبي تحتل أقل مساحة بين الإمارات؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل دبي عاصمة الدولة؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل الإمارات تأسست عام 1971؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"إمارة مشهورة بعجائبها المعمارية؟", options:["دبي", "أم القيوين", "الفجيرة"], answer:"دبي"},
-      {question:"إمارة معروفة بالمساجد الكثيرة؟", options:["الشارقة", "دبي", "رأس الخيمة"], answer:"الشارقة"},
-      {question:"أين يقع جامع الشيخ زايد؟", options:["أبوظبي", "دبي", "الشارقة"], answer:"أبوظبي"},
-      {question:"ما اسم الجبل الأعلى في الإمارات؟", options:["جبل جيس", "جبل حفيت", "جبل علي"], answer:"جبل جيس"},
-      {question:"متى انضمت رأس الخيمة للاتحاد؟", options:["1972", "1971", "1973"], answer:"1972"},
-      {question:"أشهر حدث عالمي استضافته دبي؟", options:["إكسبو 2020", "كأس آسيا", "قمة المناخ"], answer:"إكسبو 2020"},
-      {question:"اسم مطار دبي الرئيسي؟", options:["مطار آل مكتوم", "مطار دبي الدولي", "مطار الاتحاد"], answer:"مطار دبي الدولي"},
-      {question:"أطول مبنى في العالم يقع في؟", options:["دبي", "نيويورك", "شنغهاي"], answer:"دبي"},
-      {question:"ما اسم العملة الإماراتية؟", options:["درهم", "دينار", "يورو"], answer:"درهم"},
-      {question:"ما هي الإمارة الشمالية؟", options:["رأس الخيمة", "أبوظبي", "الظفرة"], answer:"رأس الخيمة"},
-      {question:"أين يقع ميناء جبل علي؟", options:["دبي", "عجمان", "الشارقة"], answer:"دبي"},
-      {question:"هل الإمارات جزء من مجلس التعاون الخليجي؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل الشيخ محمد بن راشد هو رئيس الدولة؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل الجواز الإماراتي من أقوى الجوازات؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل يوجد قطار بين الإمارات حاليًا؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل الهوية الوطنية إلزامية لكل مواطن؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل كان الشيخ زايد حاكمًا للشارقة؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل شعار الدولة يحتوي على صقر؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل المريخ هو أول محطة فضائية إماراتية؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل واحة الكرامة في دبي؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل دولة الإمارات بدون نظام تعليمي؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل الاتحاد تم في 2 ديسمبر؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل الشيخ خليفة بن زايد هو المؤسس؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل فزاع هو اسم الشيخ محمد بن راشد؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل مهرجان قصر الحصن يقام في الشارقة؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل يوجد متحف الاتحاد في أبوظبي؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل التعليم مجاني للمواطنين؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل دولة الإمارات لديها وزارة للسعادة؟", options:["صح", "خطأ"], answer:"صح"},
-      {question:"هل الشيخ محمد بن زايد هو ولي عهد؟", options:["صح", "خطأ"], answer:"خطأ"},
-      {question:"هل توجد جامعة الإمارات في العين؟", options:["صح", "خطأ"], answer:"صح"}
-    ];
-
-    let currentQuestion = 0;
-    let score = 0;
-    let timer;
-    let timeLeft = 15;
-
-    function shuffle(arr) {
-      return arr.sort(() => Math.random() - 0.5);
-    }
-
-    function showQuestion() {
-      clearInterval(timer);
-      timeLeft = 15;
-      const q = questions[currentQuestion];
-      const stageNum = Math.floor(currentQuestion / 10) + 1;
-      document.getElementById("stage").innerText = `🎯 المرحلة ${stageNum}`;
-      document.getElementById("question").innerText = q.question;
-
-      const options = shuffle([...q.options]);
-      const container = document.getElementById("options");
-      container.innerHTML = "";
-      options.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(opt);
-        container.appendChild(btn);
-      });
-
-      document.getElementById("timer").innerText = `⏳ الوقت: ${timeLeft}`;
-      timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = `⏳ الوقت: ${timeLeft}`;
-        if (timeLeft === 0) {
-          clearInterval(timer);
-          currentQuestion++;
-          if (currentQuestion < questions.length) showQuestion();
-          else showCertificate();
-        }
-      }, 1000);
-    }
-
-    function checkAnswer(selected) {
-      clearInterval(timer);
-      if (selected === questions[currentQuestion].answer) score++;
-      document.getElementById("score").innerText = `النقاط: ${score}`;
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
-        showQuestion();
-      } else {
-        showCertificate();
-      }
-    }
-
-    function showCertificate() {
-      document.getElementById("quiz").style.display = "none";
-      const cert = document.getElementById("certificate");
-      cert.innerHTML = `
-        <h2>🎓 شهادة إنجاز</h2>
-        <p>نُهديك هذه الشهادة تقديرًا لمعرفتك بالهوية الوطنية لدولة الإمارات.</p>
-        <p><strong>عدد النقاط: ${score} من ${questions.length}</strong></p>
-        <p>فكرة وتصميم وتنفيذ: مساعد سالم الخزيمي</p>
-      `;
-      cert.style.display = "block";
-    }
-
-    showQuestion();
-  </script>
-</body>
-</html>
+<style>
+#certificate {
+  display: none;
+  margin-top: 30px;
+  padding: 30px;
+  background-color: #fffdf5;
+  color: #000;
+  font-size: 22px;
+  border: 10px solid #d4af37;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Cairo', sans-serif;
+  background-image: url('https://www.transparenttextures.com/patterns/white-paper.png');
+  position: relative;
+}
+#certificate::before {
+  content: '';
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Emblem_of_the_United_Arab_Emirates.svg/200px-Emblem_of_the_United_Arab_Emirates.svg.png');
+  background-size: 60px;
+  background-repeat: no-repeat;
+  background-position: top left;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  opacity: 0.8;
+}
+</style>
