@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -94,12 +93,16 @@
 
     let currentQuestion = 0;
     let score = 0;
+    let timer;
+    let timeLeft = 15;
 
     function shuffle(arr) {
       return arr.sort(() => Math.random() - 0.5);
     }
 
     function showQuestion() {
+      clearInterval(timer);
+      timeLeft = 15;
       const q = questions[currentQuestion];
       const stageNum = Math.floor(currentQuestion / 10) + 1;
       document.getElementById("stage").innerText = `🎯 المرحلة ${stageNum}`;
@@ -114,12 +117,23 @@
         btn.onclick = () => checkAnswer(opt);
         container.appendChild(btn);
       });
+
+      document.getElementById("timer").innerText = `⏳ الوقت: ${timeLeft}`;
+      timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `⏳ الوقت: ${timeLeft}`;
+        if (timeLeft === 0) {
+          clearInterval(timer);
+          currentQuestion++;
+          if (currentQuestion < questions.length) showQuestion();
+          else showCertificate();
+        }
+      }, 1000);
     }
 
     function checkAnswer(selected) {
-      if (selected === questions[currentQuestion].answer) {
-        score++;
-      }
+      clearInterval(timer);
+      if (selected === questions[currentQuestion].answer) score++;
       document.getElementById("score").innerText = `النقاط: ${score}`;
       currentQuestion++;
       if (currentQuestion < questions.length) {
