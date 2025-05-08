@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>عزز هويتك</title>
   <style>
     body {
@@ -11,6 +12,7 @@
       padding: 0;
       text-align: center;
       direction: rtl;
+      position: relative;
     }
     header {
       background-color: #004d40;
@@ -18,6 +20,12 @@
       padding: 15px;
       font-size: 20px;
       font-weight: bold;
+      position: relative;
+    }
+    .visitor-counter {
+      position: absolute;
+      left: 10px;
+      top: 10px;
     }
     .stage-label {
       background-color: #ffd700;
@@ -61,13 +69,27 @@
       border: 2px dashed #000;
       background-color: #fff;
       color: #000;
-      font-size: 20px;
+      font-size: 22px;
       border-radius: 12px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .insta-icon {
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <header>إعداد وتنفيذ وفكرة: مساعد سالم الخزيمي</header>
+  <header>
+    فكرة وتصميم وتنفيذ: مساعد سالم الخزيمي
+    <div class="visitor-counter">
+      <a href="https://www.hitwebcounter.com" target="_blank">
+        <img src="https://hitwebcounter.com/counter/counter.php?page=20600470&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" alt="Visit counter" border="0">
+      </a>
+    </div>
+  </header>
+
   <div id="quiz">
     <div id="stage" class="stage-label"></div>
     <div id="question" class="question"></div>
@@ -75,19 +97,22 @@
     <div id="score">النقاط: 0</div>
     <div id="timer" style="color: red; font-weight: bold; margin-top: 10px;">⏳ الوقت: 15</div>
   </div>
+
   <div id="certificate"></div>
+
   <footer>
-    <img src="https://raw.githubusercontent.com/Mesaedalkhuzaimi/identity-box-assets/main/instagram-barcode.jpg" alt="باركود إنستغرام" width="140">
-    <p>تابعونا على إنستغرام</p>
+    <a href="https://www.instagram.com/mesaed.alkhuzaimi" target="_blank">
+      <img class="insta-icon" src="https://cdn-icons-png.flaticon.com/512/174/174855.png" width="50" alt="Instagram" />
+    </a>
   </footer>
 
   <script>
     const questions = [];
     for (let i = 1; i <= 50; i++) {
       questions.push({
-        question: `سؤال رقم ${i}: ما هي إحدى الحقائق عن دولة الإمارات؟`,
-        options: [`إجابة أ ${i}`, `إجابة ب ${i}`, `إجابة صحيحة ${i}`],
-        answer: `إجابة صحيحة ${i}`
+        question: `السؤال رقم ${i}: ما هي إحدى المعلومات عن دولة الإمارات؟`,
+        options: [`إجابة أ`, `إجابة ب`, `إجابة صحيحة`],
+        answer: `إجابة صحيحة`
       });
     }
 
@@ -150,7 +175,7 @@
         <h2>🎓 شهادة إنجاز</h2>
         <p>نُهديك هذه الشهادة تقديرًا لمعرفتك بالهوية الوطنية لدولة الإمارات.</p>
         <p><strong>عدد النقاط: ${score} من ${questions.length}</strong></p>
-        <p>إعداد وتنفيذ وفكرة: مساعد سالم الخزيمي</p>
+        <p>فكرة وتصميم وتنفيذ: مساعد سالم الخزيمي</p>
       `;
       cert.style.display = "block";
     }
