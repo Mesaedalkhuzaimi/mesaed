@@ -1,70 +1,13 @@
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <title>عزز هويتك الوطنية</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module">
-      import React from 'https://cdn.skypack.dev/react';
-      import ReactDOM from 'https://cdn.skypack.dev/react-dom';
-
-      const questions = [
-        { question: "متى تأسست دولة الإمارات؟", options: ["1971", "1981", "1990"], answer: "1971" },
-        { question: "كم عدد الإمارات؟", options: ["5", "6", "7"], answer: "7" }
-      ];
-
-      function QuizApp() {
-        const [step, setStep] = React.useState(0);
-        const [selected, setSelected] = React.useState('');
-        const [score, setScore] = React.useState(0);
-        const [isFinished, setIsFinished] = React.useState(false);
-
-        const current = questions[step];
-
-        function next() {
-          if (selected === current.answer) setScore(score + 1);
-          if (step + 1 < questions.length) {
-            setStep(step + 1);
-            setSelected('');
-          } else setIsFinished(true);
-        }
-
-        return React.createElement('div', { style: { fontFamily: 'sans-serif', textAlign: 'center' } },
-          React.createElement('h1', null, 'عزز هويتك الوطنية 🇦🇪'),
-          !isFinished
-            ? React.createElement('div', null,
-                React.createElement('h3', null, current.question),
-                current.options.map(opt =>
-                  React.createElement('div', { key: opt },
-                    React.createElement('label', null,
-                      React.createElement('input', {
-                        type: 'radio',
-                        name: 'opt',
-                        value: opt,
-                        checked: selected === opt,
-                        onChange: () => setSelected(opt)
-                      }),
-                      ' ', opt
-                    )
-                  )
-                ),
-                React.createElement('button', {
-                  onClick: next,
-                  disabled: !selected
-                }, 'التالي')
-              )
-            : React.createElement('div', null,
-                React.createElement('h2', null, 'تم الانتهاء!'),
-                React.createElement('p', null, `درجتك: ${score} من ${questions.length}`)
-              )
-        );
-      }
-
-      ReactDOM.render(React.createElement(QuizApp), document.getElementById('root'));
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>عزز هويتك الوطنية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>
